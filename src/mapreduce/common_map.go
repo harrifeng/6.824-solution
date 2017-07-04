@@ -3,7 +3,6 @@ package mapreduce
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"hash/fnv"
 	"io/ioutil"
 	"os"
@@ -38,7 +37,8 @@ func doMap(
 	for i := 0; i < nReduce; i++ {
 		b := new(bytes.Buffer)
 		json.NewEncoder(b).Encode(reduceArr[i])
-		ioutil.WriteFile(fmt.Sprintf("%s-m-%s-r.txt", mapTaskNumber, i), b.Bytes(), 0755)
+
+		ioutil.WriteFile(reduceName(jobName, mapTaskNumber, i), b.Bytes(), 0755)
 	}
 
 	//
