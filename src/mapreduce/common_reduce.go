@@ -18,20 +18,20 @@ func doReduce(
 	nMap int, // the number of map tasks that were run ("M" in the paper)
 	reduceF func(key string, values []string) string,
 ) {
-	mm := make(map[KeyValue][]KeyValue)
+	mm := make(map[string][]string)
 	for i := 0; i < nMap; i++ {
 		f, _ := os.Open(reduceName(jobName, i, reduceTaskNumber))
 		defer f.Close()
 		dec := json.NewDecoder(f)
 		for {
 			var tmp []KeyValue
-			if err := dec.Decode(&m); err == io.EOF {
+			if err := dec.Decode(&tmp); err == io.EOF {
 				break
 			} else if err != nil {
 				log.Println(err)
 			}
 			for _, one := range tmp {
-				mm[one] = append(mm[one], one)
+				mm[one.Key] = append(mm[one.Key], one.Key)
 			}
 		}
 	}

@@ -18,7 +18,7 @@ func doMap(
 	nReduce int, // the number of reduce task that will be run ("R" in the paper)
 	mapF func(file string, contents string) []KeyValue,
 ) {
-	reduceArr = [][]KeyValue{}
+	reduceArr := [][]KeyValue{}
 
 	for i := 0; i < nReduce; i++ {
 		reduceArr = append(reduceArr, []KeyValue{})
@@ -27,11 +27,11 @@ func doMap(
 	f, _ := os.Open(inFile)
 	b, _ := ioutil.ReadAll(f)
 
-	mapResult = mapF(inFile, string(b))
+	mapResult := mapF(inFile, string(b))
 
 	for _, val := range mapResult {
 		idx := ihash(val.Key) % nReduce
-		reduceArr[idx] = append(reduceArr[idx], val.Value)
+		reduceArr[idx] = append(reduceArr[idx], val)
 	}
 
 	for i := 0; i < nReduce; i++ {
